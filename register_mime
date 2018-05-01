@@ -1,0 +1,31 @@
+#!/usr/bin/python3
+# Simplifies registering a new MIME type. Run as ROOT
+import os
+
+def command(cmd):
+    print(cmd)
+    os.system(cmd)
+
+name = input("Name (without '.xml'): ")
+
+template = """<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+   <mime-type type="text/example">
+     <comment>Example file type </comment>
+     <glob pattern="*.XXX"/>
+   </mime-type>
+</mime-info>
+"""
+
+filename = "/usr/share/mime/packages/{}.xml".format(name)
+
+print("-> Creating file")
+
+file = open(filename, "w")
+file.write(template)
+file.close()
+
+print("-> Editing with nano")
+command("nano " + filename)
+print("-> Updating Database")
+command("update-mime-database /usr/share/mime")
